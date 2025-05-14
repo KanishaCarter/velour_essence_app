@@ -20,8 +20,8 @@ function AvailableScents() {
   }, []);
 
   const filteredScents = scents.filter(
-    scents => scent.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-            scent.designer.toLowerCase().includes(searchTerm.toLowerCase())
+    scents => scent.name.toLowerCase().includes(searchScent.toLowerCase()) || 
+            scent.designer.toLowerCase().includes(searchScent.toLowerCase())
   );
 
   return (
