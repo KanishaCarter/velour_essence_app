@@ -1,5 +1,5 @@
 class perfume {
-    constructor (id, name, designer, size, price, family, type, notes){
+    constructor (id, name, designer, size, price, family, type, notes, na){
         this.id = id;
         this.img = img;
         this.name = name;
@@ -9,6 +9,7 @@ class perfume {
         this.family = family;
         this.type = type;
         this.notes = notes;
+        this.na = na;
     }
 }
 
