@@ -8,7 +8,7 @@ function AvailableScents() {
   useEffect(() => {
     async function fetchScents() {
       try {
-        const response = await fetch('http://localhost:5173/api/scents');
+        const response = await fetch('http://localhost:3000/api/scents');
         const data = await response.json();
         setScents(data);
       } catch (error) {
@@ -20,7 +20,7 @@ function AvailableScents() {
   }, []);
 
   const filteredScents = scents.filter(
-    scents => scent.name.toLowerCase().includes(searchScent.toLowerCase()) || 
+    scent => scent.name.toLowerCase().includes(searchScent.toLowerCase()) || 
             scent.designer.toLowerCase().includes(searchScent.toLowerCase())
   );
 
