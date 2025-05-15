@@ -1,7 +1,6 @@
-class perfume {
+class Perfume {
     constructor (id, name, designer, size, price, family, type, notes){
         this.id = id;
-        this.img = img;
         this.name = name;
         this.designer = designer;
         this.size = size;
@@ -13,36 +12,11 @@ class perfume {
 }
 
 const ScentList = [
-    {
-        id: 1,
-        name: "Lost Cherry Eau de Parfum Fragrance",
-        designer: "Tom Ford",
-        size: 3.4,
-        price: 615.00,
-        family: "Warm & Spicy",
-        type: "Warm & Sweet Gourmands",
-        notes: "Black Cherry, Tonka Bean, Almond",
-    },
-    {
-        id: 2,
-        name: "Donna Born In Roma Eau de Parfum",
-        designer: "Valentino",
-        size: 1.7,
-        price: 140.00,
-        family: "Floral",
-        type: "Warm Florals",
-        notes: "Blackcurrant, Jasmine Grandiflorum, Bourbon Vanilla",
-    },
-    {
-        id: 3,
-        name: "Mon Paris Eau de Parfum",
-        designer: "Yves Saint Laurent",
-        size: 1.6,
-        price: 120.00,
-        family: "Floral",
-        type: "Fruity Floral",
-        notes: "Datura Flower, Patchouli, Red Berries",
-    }
-]
+    new Perfume(1, "Lost Cherry Eau de Parfum Fragrance", "Tom Ford", 3.4, 615.00, "Warm & Spicy", "Warm & Sweet Gourmands", "Black Cherry, Tonka Bean, Almond"),
+    new Perfume(2, "Donna Born In Roma Eau de Parfum", "Valentino", 1.7, 140.00, "Floral", "Warm Florals", "Blackcurrant, Jasmine Grandiflorum, Bourbon Vanilla"),
+    new Perfume(3, "Mon Paris Eau de Parfum", "Yves Saint Laurent", 1.6, 120.00, "Floral", "Fruity Floral", "Datura Flower, Patchouli, Red Berries"),
+];
+
+
  
 export default ScentList
