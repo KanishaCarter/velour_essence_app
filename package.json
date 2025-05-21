@@ -4,8 +4,8 @@
   "description": "capstone project - ecommerce site",
   "main": "index.js",
   "scripts": {
-    "start": "node server",
-    "start:dev": "nodemon server",
+    "start": "node server/index.js",
+    "start:dev": "nodemon server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

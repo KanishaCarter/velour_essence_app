@@ -11,7 +11,7 @@ import Checkout from './components/Checkout';
 
 function App() {
   return (
-    <BrowserRouter>
+    <>
     <Navigation/>
     <Routes>
         <Route path="/" element = {<ScentCard/>}/>
@@ -21,7 +21,7 @@ function App() {
         <Route path="/checkout" element = {<ScentCard/>}/>
         <Route path="/" element = {<ScentCard/>}/>
     </Routes>
-    </BrowserRouter>
+    </>
   );
 }
 
