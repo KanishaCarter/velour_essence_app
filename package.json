@@ -4,8 +4,8 @@
   "description": "capstone project - ecommerce site",
   "main": "index.js",
   "scripts": {
-    "start":"node index.js",
-    "start:dev":"nodemon index.js",
+    "start": "node index.js",
+    "start:dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -20,5 +20,13 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KanishaCarter/velour_essence_app.git"
+  },
+  "bugs": {
+    "url": "https://github.com/KanishaCarter/velour_essence_app/issues"
+  },
+  "homepage": "https://github.com/KanishaCarter/velour_essence_app#readme"
 }
