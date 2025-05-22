@@ -11,7 +11,7 @@ Frontend built with React; backend built with Express and raw SQL
 
 How to Run Locally:
 1. Clone repo by entering the following in your terminal
-git clone https://github.com/your-username/velour_essence_app.git
+git clone https://github.com/KanishaCarter/velour_essence_app/tree/branch1
 cd velour_essence_app
 
 2. Install dependencies
