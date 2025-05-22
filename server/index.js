@@ -3,15 +3,74 @@ const express = require("express");
 const server = express();
 const pg = require("pg");
 const path = require("path");
+const jwt = require("jsonwebtoken");
+const path = require("path");
 
 const client = new pg.Client(process.env.DATABASE_URL);
 
-server.use(express.static(path.join(__dirname, "../client/dist")));
+server.use(express.static(path.join(__dirname, "../dist")));
 server.use(express.json());
 
 
 server.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../client/dist/index.html"));
+  res.sendFile(path.join(__dirname, "../dist/index.html"));
+});
+
+// Registration 
+server.post("/api/register", async (req, res, next) => {
+  try {
+    const {username, password, name, address, phoneNumber} = req.body;
+    const hashpassword = await bcrypt.hash(password, 8);
+
+    const SQL = `
+    INSERT INTO users (username, password, name, address, phoneNumber)
+    VALUES ($1, $2, $3, $4, $5)
+    RETURNING id, username;
+    `;
+
+    const response = await client.query(SQL, [
+      username,
+      hashpassword,
+      name,
+      address,
+      phoneNumber,
+    ]);
+
+    const user = response.rows[0];
+    const token = jwt.sign({id: user.id, username: user.username}, process.env.JWT_SECRET);
+    res.send({token});
+    } catch (err) {
+      next(err);
+    }
+});
+
+// Login
+server.post("/api/login", async (req, res, next) => {
+  try {
+    const {username, password} = req.body;
+    const SQL = `
+    SELECT * FROM users 
+    WHERE username = $1;`;
+    
+    const response = await client.query(SQL, [username]);
+    const user = response.rows[0];
+    if (!user) {
+      return res.status(400).send({error: "There's no account associated with the username or password provided."});
+    }
+    const isUser = await bcrypt.compare(password, user.password);
+    if (!isUser) {
+      return res.status(400).send({error:"There's no account associated with the username or password provided."});
+    }
+    const token = jwt.sign({id: user.id, username: user.username}, process.env.JWT_SECRET);
+    res.send({token});
+  } catch (err) {
+    next(err);
+  }
+});
+
+
+server.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, ".."))
 });
 
 // API Route gets all scents
