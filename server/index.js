@@ -68,22 +68,40 @@ server.post("/api/login", async (req, res, next) => {
   }
 });
 
-
-server.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, ".."))
-});
-
-// API Route gets all scents
+// Gets all scents
 server.get("/api/scents", async (req, res, next) => {
   try {
     const SQL = `SELECT * FROM scents;`;
     const response = await client.query(SQL);
     res.send(response.rows);
   } catch (ex) {
-    next(ex);
+    next(err);
   }
 });
 
+// Gets account info
+server.get("/api/account", async (req, res, next) => {
+  try {
+    const auth = req.headers.authorization;
+    const token = auth && auth.split(' ')[1];
+
+    if (!token) {
+      return res.status(400).send({message: 'Token not found'});
+    }
+    const jwt = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = jwt.id;
+
+    const SQL = `SELECT id, username, name, address, phoneNumber
+    FROM users
+    WHERE id = $1;`;
+    const response = await client.query(SQL, [userId]);
+    res.send(response.rows[0]);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Handles errors
 server.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send({ error: err.message });
@@ -96,16 +114,26 @@ const init = async () => {
 
     const SQL = `
       DROP TABLE IF EXISTS scents;
+      DROP TABLE IF EXISTS users;
+
+      CREATE TABLE users (
+      id UUID SERIAL PRIMARY KEY,
+      username VARCHAR(100) UNIQUE NOT NULL,
+      password VARCHAR(10) NOT NULL,
+      name VARCHAR(100) NOT NULL,
+      address VARCHAR(100) NOT NULL,
+      phoneNumber VARCHAR(10) NOT NULL
+      );
 
       CREATE TABLE scents (
           id SERIAL PRIMARY KEY,
-          name TEXT NOT NULL,
-          designer TEXT NOT NULL,
+          name VARCHAR(100) NOT NULL,
+          designer VARCHAR(100) NOT NULL,
           size DECIMAL NOT NULL,
           price DECIMAL NOT NULL,
-          family TEXT NOT NULL,
-          type TEXT NOT NULL,
-          notes TEXT NOT NULL
+          family VARCHAR(255) NOT NULL,
+          type VARCHAR(255) NOT NULL,
+          notes VARCHAR(255) NOT NULL
       );
 
       INSERT INTO scents (name, designer, size, price, family, type, notes) VALUES
