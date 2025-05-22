@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-function AvailableScents() {
+function Scents() {
   const [scents, setScents] = useState([]);
   const [searchScent, setSearchScent] = useState('');
 
@@ -44,4 +44,4 @@ function AvailableScents() {
   );
 }
 
-export default AvailableScents;
+export default Scents;
