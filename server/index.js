@@ -86,7 +86,7 @@ server.get("/api/account", async (req, res, next) => {
     const token = auth && auth.split(' ')[1];
 
     if (!token) {
-      return res.status(400).send({message: 'Token not found'});
+      return res.status(400).send({message: "Token not found"});
     }
     const jwt = jwt.verify(token, process.env.JWT_SECRET);
     const userId = jwt.id;
@@ -101,6 +101,103 @@ server.get("/api/account", async (req, res, next) => {
   }
 });
 
+//Gets favorites
+server.get("/api/favorites", async (req, res, next) => {
+  try {
+    const auth = req.headers.authorization;
+    const token = auth && auth.split(' ')[1];
+
+    if (!token) {
+      return res.status(400).send({message: "Token not found"});
+    }
+    const jwt = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = jwt.id;
+
+    const SQL = `
+    SELECT scents.*
+    FROM favorites
+    JOIN scents ON favorites.scentId = scents.id
+    WHERE favorites.userId = $1;`;
+
+    const response = await client.query(SQL, [userId]);
+    res.send(response.rows);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// User's Orders list
+server.get("/api/orders", async (req, res, next) => {
+  try {
+    const auth = req.headers.authorization;
+    const token = auth && auth.split(' ')[1];
+
+    if (!token) {
+      return res.status(400).send({message: "Token not found"})
+    }
+    const jwt = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = jwt.id;
+
+    const SQL =`
+    SELECT *
+    FROM orders
+    WHERE userId = $1
+    ORDER BY createdAt DESC;`;
+    const response = await client.query(SQL, [userId]);
+    res.send(response.rows);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Gets single order
+server.get("/api/orders/{id}", async (req, res, next) => {
+  try {
+    const auth = req.headers.authorization;
+    const token = auth && auth.split(' ')[1];
+
+    if (!token) {
+      return res.status(400).send({message: "No token found"});
+    }
+    const jwt = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = jwt.id;
+    const orderId = req.params.id;
+
+    const SQL = `
+    SELECT *
+    FROM orders
+    WHERE id = $1 AND userId = $2;`;
+    const response = await client.query(SQL, [orderId, userId]);
+
+    if (response.rows.length === 0) {
+      return res.status(401).send({message: "No order found"});
+    }
+    res.send(response.rows[0]);
+  } catch(err) {
+    next(err);
+  }
+});
+
+// Gets one Scent's card
+server.get("/api/scents/{id}", async (req, res, next) => {
+  try {
+    const scentId = req.params.id;
+    const SQL = `
+    SELECT *
+    FROM scents
+    WHERE id = $1;`;
+    const response = await client.query(SQL, [scentId]);
+
+    if (response.rows.length === 0) {
+      return res.status(401).send({message: "Scent not found"});
+    }
+    res.send(response.rows[0]);
+  } catch (err) {
+    next(err);
+  }
+});
+
+
 // Handles errors
 server.use((err, req, res, next) => {
   console.error(err.stack);
@@ -113,8 +210,11 @@ const init = async () => {
     console.log("Connected to DB");
 
     const SQL = `
-      DROP TABLE IF EXISTS scents;
-      DROP TABLE IF EXISTS users;
+    DROP TABLE IF EXISTS users;  
+    DROP TABLE IF EXISTS scents;
+    DROP TABLE IF EXISTS favorites;
+    DROP TABLE IF EXISTS orders;
+    DROP TABLE IF EXISTS orderdetails;  
 
       CREATE TABLE users (
       id UUID SERIAL PRIMARY KEY,
@@ -136,10 +236,41 @@ const init = async () => {
           notes VARCHAR(255) NOT NULL
       );
 
+      CREATE TABLE favorites (
+      id SERIAL PRIMARY KEY,
+      userId INTEGER REFERENCES users(id),
+      scentId INTEGER REFERENCES scents(id),
+      );
+
+      CREATE TABLE orders (
+      id SERIAL PRIMARY KEY,
+      userId INTEGER REFERENCES users(id),
+      createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      );
+
+      CREATE TABLE orderDetails (
+      id SERIAL PRIMARY KEY,
+      orderId INTEGER REFERENCES orders(id),
+      scentId INTEGER REFERENCES scents(id),
+      qty INTEGER NOT NULL
+      );
+
       INSERT INTO scents (name, designer, size, price, family, type, notes) VALUES
       ('Lost Cherry Eau de Parfum Fragrance', 'Tom Ford', 3.4, 615.00, 'Warm & Spicy', 'Warm & Sweet Gourmands', 'Black Cherry, Tonka Bean, Almond'),
       ('Donna Born In Roma Eau de Parfum', 'Valentino', 1.7, 140.00, 'Floral', 'Warm Florals', 'Blackcurrant, Jasmine Grandiflorum, Bourbon Vanilla'),
       ('Mon Paris Eau de Parfum', 'Yves Saint Laurent', 1.6, 120.00, 'Floral', 'Fruity Floral', 'Datura Flower, Patchouli, Red Berries');
+      
+      INSERT INTO users (username, password, name, address, phoneNumber) VALUES
+      ('kaycee45', 'ifghtydp', 'Kanisha Carter', '105 E Dog Lane Euless, TX 76039', 8178512641);
+      
+      INSERT INTO orders (userId) VALUES
+      (1),
+
+      INSERT INTO ordersDetails (orderId, scentId, qty) VALUES
+      (1, 1, 2);
+
+      INSERT INTO favorites (userId, scentId) VALUES
+      (1, 1);
     `;
 
     await client.query(SQL);
