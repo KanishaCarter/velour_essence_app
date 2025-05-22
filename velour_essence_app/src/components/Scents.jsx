@@ -8,7 +8,7 @@ function Scents() {
   useEffect(() => {
     async function fetchScents() {
       try {
-        const response = await fetch('http://localhost:3000/api/scents');
+        const response = await fetch('api/scents');
         const data = await response.json();
         setScents(data);
       } catch (error) {

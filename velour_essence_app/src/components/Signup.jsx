@@ -8,12 +8,12 @@ function Signup() {
   const [address, setAddress] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
 
-  const handleLogin = (event) => {
+  const handleSignup = (event) => {
     event.preventDefault();
   };
   
   return (
-    <form onSubmit={handleLogin}>
+    <form onSubmit={handleSignup}>
       <h1>Sign Up</h1>
       <input type="text" value={username} onChange={event => setUsername(event.target.value)} placeholder="Username" required />
       <input type="password" value={password} onChange={event => setPassword(event.target.value)} placeholder="Password" required /><br></br>
