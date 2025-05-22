@@ -11,18 +11,23 @@ import Home from './components/Home';
 import Account from './components/Account';
 import Order from './components/Order';
 import Orders from './components/Orders';
+import Favorites from './components/Favorites';
 
 
 function App() {
   return (
     <>
-    <div id = "container">
-      <div id = "navigation">
-        <Link to= {"/login"}>Login</Link>
-        <Link to= {"/signup"}>Signup</Link>
-        <Link to= {"/cart"}>Cart</Link>
-      </div>
-    </div>
+      <header id = "headerContainer">
+        <div id = "nameLogo">
+          <h2>Velour Essence</h2>
+        </div>
+        <div id = "navBar">
+          <Link to= {"/"}>Home</Link>
+          <Link to= {"/login"}>Login</Link>
+          <Link to= {"/signup"}>Signup</Link>
+          <Link to= {"/cart"}>Cart</Link>
+        </div>
+      </header>
     <div id="main-section">
     <Routes>
         <Route path="/" element = {<Home/>}/>
@@ -32,12 +37,10 @@ function App() {
         <Route path="/scentCard" element = {<ScentCard/>}/>
         <Route path="/cart" element = {<Cart/>}/>
         <Route path="/checkout" element = {<Checkout/>}/>
-        {/* FIX ACCOUNT ROUTE */}
-        {/*<Route path="account" element = {<Account/>}/>*/}
-        {/* FIX ORDERS ROUTE */}
-        {/*<Route path="orders" element = {<Orders/>}/>*/}
-        {/* FIX ORDER ROUTE */}
-        {/*<Route path="order" element = {<Order/>}/>*/}
+        <Route path="/account" element = {<Account/>}/>
+        <Route path="/orders" element = {<Orders/>}/>
+        <Route path="/order" element = {<Order/>}/>
+        <Route path="/favorites" element = {<Favorites/>}/>
     </Routes>
     </div>
     </>

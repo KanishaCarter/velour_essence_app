@@ -13,7 +13,7 @@ function Login() {
     <form onSubmit={handleLogin}>
       <h1>Login</h1>
       <input type="text" value={username} onChange={event => setUsername(event.target.value)} placeholder="Username" required />
-      <input type="password" value={password} onChange={event => setPassword(event.target.value)} placeholder="Password" required />
+      <input type="password" value={password} onChange={event => setPassword(event.target.value)} placeholder="Password" required /><br></br>
       <button type="submit">Login</button>
     </form>
   );

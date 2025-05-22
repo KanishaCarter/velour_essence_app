@@ -13,13 +13,21 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-#scentsContainer {
-  display: flex;
+/*MY STYLING BELOW*/
+
+#headerContainer {
+  position:fixed;
+  width: 100%;
+  background-color: pink;
+  padding: 10px 0;
+  border-bottom: 1px solid #ccc;
+  display: inline-flex;
+  align-self: center;
 }
 
-ul {
-  display: block;
-}
+
+
+/*MY STYLING ABOVE*/
 
 a {
   font-weight: 500;
